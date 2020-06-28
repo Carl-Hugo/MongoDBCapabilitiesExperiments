@@ -11,6 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDbCapabilities", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDbCapabilities.Tests", "test\MongoDbCapabilities.Tests\MongoDbCapabilities.Tests.csproj", "{306CF0D9-4888-44BE-996F-FC66A4D04BF2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBE701AB-E920-4BF5-B0F6-8B6505E0477E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +52,18 @@ Global
 		{306CF0D9-4888-44BE-996F-FC66A4D04BF2}.Release|x64.Build.0 = Release|Any CPU
 		{306CF0D9-4888-44BE-996F-FC66A4D04BF2}.Release|x86.ActiveCfg = Release|Any CPU
 		{306CF0D9-4888-44BE-996F-FC66A4D04BF2}.Release|x86.Build.0 = Release|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Debug|x64.Build.0 = Debug|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Debug|x86.Build.0 = Debug|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Release|x64.ActiveCfg = Release|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Release|x64.Build.0 = Release|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Release|x86.ActiveCfg = Release|Any CPU
+		{7B62C026-0DF2-4AC6-B1B2-8FE865C78C3F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

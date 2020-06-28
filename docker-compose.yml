@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  mongodbcapabilities:
+    image: ${DOCKER_REGISTRY-}mongodbcapabilities
+    build:
+      context: .
+      dockerfile: src/MongoDbCapabilities/Dockerfile
