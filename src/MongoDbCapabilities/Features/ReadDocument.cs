@@ -53,13 +53,10 @@ namespace MongoDbCapabilities.Features
         {
             public Validator()
             {
-                RuleFor(x => x.Id)
-                    .NotEmpty()
-                    .Must(id => ObjectId.TryParse(id, out _))
-                    .WithMessage("The 'Id' must be a valid 'ObjectId'.")
-                ;
+                RuleFor(x => x.Id).ObjectId();
             }
         }
+
         private class Document : BaseResult
         {
             public ObjectId Id { get; set; }
@@ -90,6 +87,10 @@ namespace MongoDbCapabilities.Features
                 ;
 
                 var result = _mapper.Map<Result>(data);
+                if (result == null)
+                {
+                    throw new DocumentNotFoundException(request.Id);
+                }
                 return Task.FromResult(result);
             }
         }

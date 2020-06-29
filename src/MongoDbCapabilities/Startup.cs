@@ -53,6 +53,9 @@ namespace MongoDbCapabilities
                     .WithTransientLifetime()
                 )
 
+                .AddExceptionMapper(builder => builder
+                    .MapCommonExceptions()
+                )
 
                 .AddSwaggerDocument()
 
@@ -67,6 +70,7 @@ namespace MongoDbCapabilities
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseExceptionMapper();
             app.UseRouting();
             app.UseOpenApi();
             app.UseSwaggerUi3();

@@ -39,5 +39,12 @@ namespace MongoDbCapabilities.Features.Controllers
                 result
             );
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] DeleteDocument.Command command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
     }
 }
