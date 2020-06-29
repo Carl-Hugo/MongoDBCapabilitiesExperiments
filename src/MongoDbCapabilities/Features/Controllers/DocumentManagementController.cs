@@ -53,5 +53,12 @@ namespace MongoDbCapabilities.Features.Controllers
             await _mediator.Send(command);
             return Ok();
         }
+
+        [HttpPut]
+        public async Task<IActionResult> ReplaceAsync([FromBody]ReplaceDocument.Command command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
     }
 }

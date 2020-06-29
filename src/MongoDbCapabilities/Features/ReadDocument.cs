@@ -26,7 +26,6 @@ namespace MongoDbCapabilities.Features
             public string Id { get; set; }
         }
 
-
         public class BaseResult
         {
             public string Name { get; set; }
