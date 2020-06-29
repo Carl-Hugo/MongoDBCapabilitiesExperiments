@@ -41,7 +41,14 @@ namespace MongoDbCapabilities.Features.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] DeleteDocument.Command command)
+        public async Task<IActionResult> DeleteOneAsync([FromRoute]DeleteDocument.Command command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllAsync([FromQuery]DeleteAllDocuments.Command command)
         {
             await _mediator.Send(command);
             return Ok();
