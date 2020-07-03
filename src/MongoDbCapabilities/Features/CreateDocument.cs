@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDbCapabilities.Features.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,14 +57,10 @@ namespace MongoDbCapabilities.Features
             public MapperProfile()
             {
                 CreateMap<Command, Document>()
-                    .AfterMap((c, d) => d.Id = ObjectId.GenerateNewId());
+                    .AfterMap((c, d) => d.Id = ObjectId.GenerateNewId().ToString());
+                CreateMap<Command.CommandSettings, Document.DocumentSettings>().ReverseMap();
                 CreateMap<Document, Result>();
             }
-        }
-
-        private class Document : Command
-        {
-            public ObjectId Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result>

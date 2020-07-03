@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDbCapabilities.Features.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,6 @@ namespace MongoDbCapabilities.Features
     public class DeleteAllDocuments
     {
         public class Command : IRequest { }
-
-        private class Document
-        {
-            public ObjectId Id { get; set; }
-        }
 
         public class Handler : AsyncRequestHandler<Command>
         {

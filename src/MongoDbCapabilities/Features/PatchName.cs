@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDbCapabilities.Features.Models;
@@ -13,59 +14,30 @@ using System.Threading.Tasks;
 
 namespace MongoDbCapabilities.Features
 {
-    public class ReplaceDocument
+    public class PatchName
     {
         public class Command : IRequest
         {
             public string Id { get; set; }
             public string Name { get; set; }
-            public DocumentSettings Settings { get; set; }
-
-            public class DocumentSettings
-            {
-                public bool Enabled { get; set; }
-                public string Secret { get; set; }
-                public int SomeOtherProperty { get; set; }
-            }
-        }
-
-        public class MapperProfile : Profile
-        {
-            public MapperProfile()
-            {
-                CreateMap<Command, Document>();
-                CreateMap<Command.DocumentSettings, Document.DocumentSettings>();
-            }
         }
 
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
             {
+                RuleFor(x => x.Id).ObjectId();
                 RuleFor(x => x.Name).NotEmpty();
-                RuleFor(x => x.Settings).SetValidator(new SettingsValidator());
-            }
-        }
-
-        public class SettingsValidator : AbstractValidator<Command.DocumentSettings>
-        {
-            public SettingsValidator()
-            {
-                RuleFor(x => x).NotNull();
-                RuleFor(x => x.Secret).NotEmpty();
-                RuleFor(x => x.SomeOtherProperty).GreaterThan(0);
             }
         }
 
         public class Handler : AsyncRequestHandler<Command>
         {
-            private readonly IMapper _mapper;
             private readonly IMongoClient _mongo;
             private readonly MongoDocumentOptions _options;
 
-            public Handler(IMapper mapper, IMongoClient mongo, MongoDocumentOptions options, IMediator mediator)
+            public Handler(IMongoClient mongo, MongoDocumentOptions options)
             {
-                _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
                 _mongo = mongo ?? throw new ArgumentNullException(nameof(mongo));
                 _options = options ?? throw new ArgumentNullException(nameof(options));
             }
@@ -75,22 +47,23 @@ namespace MongoDbCapabilities.Features
                 var database = _mongo.GetDatabase(_options.DatabaseName);
                 var documents = database.GetCollection<Document>(_options.CollectionName);
 
-
-                var filter = documents
-                    .Find(x => x.Id == request.Id)
-                    .Filter;
-                //var filter = Builders<Document>
-                //    .Filter
-                //    .Eq(x => x.Id, ObjectId.Parse(request.Id));
-                var replacement = _mapper.Map<Document>(request);
-                var result = await documents.ReplaceOneAsync(
-                    filter,
-                    replacement,
+                var update = new BsonDocument(
+                    "$set",
+                    new BsonDocument(new[] {
+                        new BsonElement("name", request.Name),
+                        new BsonElement("settings.patchedOn", DateTime.UtcNow),
+                        new BsonElement("settings.secret", "auto-patched secret"),
+                    }.AsEnumerable())
+                );
+                var result = await documents.UpdateOneAsync(
+                    doc => doc.Id == request.Id,
+                    update,
                     cancellationToken: cancellationToken
                 );
+
                 if (!result.IsAcknowledged)
                 {
-                    throw new NotSupportedException("An unacknowledged replace result is not supported.");
+                    throw new NotSupportedException("An unacknowledged update result is not supported.");
                 }
                 if (result.IsModifiedCountAvailable)
                 {

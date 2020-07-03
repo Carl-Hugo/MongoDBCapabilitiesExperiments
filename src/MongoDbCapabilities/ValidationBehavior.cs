@@ -8,14 +8,11 @@ using MediatR;
 
 namespace MongoDbCapabilities
 {
-    public class ExceptionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
-        private readonly IMediator _mediator;
         private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-        public ExceptionBehavior(IMediator mediator, IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _validators = validators ?? throw new ArgumentNullException(nameof(validators));
         }
 

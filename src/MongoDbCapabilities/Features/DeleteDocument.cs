@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDbCapabilities.Features.Models;
 using Namotion.Reflection;
 using System;
 using System.Collections.Generic;
@@ -28,11 +29,6 @@ namespace MongoDbCapabilities.Features
             }
         }
 
-        private class Document
-        {
-            public ObjectId Id { get; set; }
-        }
-
         public class Handler : AsyncRequestHandler<Command>
         {
             private readonly IMongoClient _mongo;
@@ -50,7 +46,7 @@ namespace MongoDbCapabilities.Features
                 var documents = database.GetCollection<Document>(_options.CollectionName);
 
                 var result = await documents.DeleteOneAsync(
-                    doc => doc.Id == ObjectId.Parse(request.Id),
+                    doc => doc.Id == request.Id,
                     cancellationToken
                 );
 

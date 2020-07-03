@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDbCapabilities.Features.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,6 @@ namespace MongoDbCapabilities.Features
             {
                 CreateMap<Document, Result>();
             }
-        }
-        private class Document
-        {
-            public ObjectId Id { get; set; }
-            public string Name { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, IEnumerable<Result>>

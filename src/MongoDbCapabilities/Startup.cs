@@ -1,11 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
+using ForEvolve.ExceptionMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,18 +54,63 @@ namespace MongoDbCapabilities
 
                 .Scan(s => s
                     .FromAssemblyOf<Startup>()
-                    .AddClasses(classes => classes.AssignableTo(typeof(ExceptionBehavior<,>)))
+                    .AddClasses(classes => classes.AssignableTo(typeof(ValidationBehavior<,>)))
                     .As(typeof(IPipelineBehavior<,>))
                     .WithTransientLifetime()
                 )
 
                 .AddExceptionMapper(builder => builder
-                    .MapCommonExceptions()
+                    .MapCommonHttpExceptions()
+                    .Map<ValidationException>(map => map.ToStatusCode(400))
+                    .Map<Exception>(map => map.To(async ctx =>
+                    {
+                        // TODO: Move this into a class that implements the
+                        // ForEvolve.ExceptionMapper.IExceptionHandler interface.
+                        // Move that class to the ForEvolve.ExceptionMapper solution.
+                        var env = ctx.HttpContext.RequestServices.GetService<IWebHostEnvironment>();
+                        var problemDetails = ctx.HttpContext.RequestServices
+                            .GetService<ProblemDetailsFactory>()
+                            .CreateProblemDetails(
+                                ctx.HttpContext,
+                                title: ctx.Error.Message,
+                                statusCode: ctx.HttpContext.Response.StatusCode
+                            );
+
+                        if (ctx.Error is ValidationException validationException)
+                        {
+                            problemDetails.Title = "One or more validation errors occurred.";
+                            var errors = validationException.Errors
+                                .GroupBy(x => x.PropertyName)
+                                .Select(e => new KeyValuePair<string, string[]>(
+                                    e.Key,
+                                    e.Select(x => x.ErrorMessage).ToArray()
+                                ));
+                            var dict = new Dictionary<string, string[]>(errors);
+                            problemDetails.Extensions.Add("errors", dict);
+                        }
+                        else if(env.IsDevelopment())
+                        {
+                            problemDetails.Extensions.Add(
+                                "debug",
+                                new
+                                {
+                                    type = ctx.Error.GetType().Name,
+                                    stackTrace = ctx.Error.StackTrace,
+                                }
+                            );
+                        }
+
+                        ctx.HttpContext.Response.ContentType = "application/problem+json";
+                        await JsonSerializer.SerializeAsync(
+                            ctx.HttpContext.Response.Body,
+                            problemDetails
+                        );
+                    }))
                 )
 
                 .AddSwaggerDocument()
 
-                .AddControllers()
+                .AddControllers(options => options.Filters.Add<ModelStateValidationFilter>());
             ;
         }
 

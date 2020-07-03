@@ -12,7 +12,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
-    <PackageReference Include="ForEvolve.ExceptionMapper.CommonExceptions" Version="1.0.9-g14939afc98" />
+    <PackageReference Include="ForEvolve.ExceptionMapper.CommonHttpExceptionHandlers" Version="1.0.23-g02ca04895c" />
+    <PackageReference Include="ForEvolve.ExceptionMapper.FluentMapper" Version="1.0.23-g02ca04895c" />
+    <PackageReference Include="ForEvolve.ExceptionMapper.HttpMiddleware" Version="1.0.23-g02ca04895c" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.4" />

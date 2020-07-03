@@ -5,6 +5,7 @@ using MediatR;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using MongoDbCapabilities.Features.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +22,9 @@ namespace MongoDbCapabilities.Features
             public string Id { get; set; }
         }
 
-        public class Result : BaseResult
+        public class Result
         {
             public string Id { get; set; }
-        }
-
-        public class BaseResult
-        {
             public string Name { get; set; }
             public ResultSettings Settings { get; set; }
 
@@ -39,12 +36,12 @@ namespace MongoDbCapabilities.Features
             }
         }
 
-
         public class MapperProfile : Profile
         {
             public MapperProfile()
             {
                 CreateMap<Document, Result>();
+                CreateMap<Document.DocumentSettings, Result.ResultSettings>();
             }
         }
 
@@ -54,11 +51,6 @@ namespace MongoDbCapabilities.Features
             {
                 RuleFor(x => x.Id).ObjectId();
             }
-        }
-
-        private class Document : BaseResult
-        {
-            public ObjectId Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result>
@@ -74,23 +66,21 @@ namespace MongoDbCapabilities.Features
                 _options = options ?? throw new ArgumentNullException(nameof(options));
             }
 
-            public Task<Result> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result> Handle(Query request, CancellationToken cancellationToken)
             {
                 var database = _mongo.GetDatabase(_options.DatabaseName);
                 var documents = database.GetCollection<Document>(_options.CollectionName);
 
-                var data = documents
-                    .AsQueryable()
-                    .Where(x => x.Id.Equals(ObjectId.Parse(request.Id)))
-                    .FirstOrDefault()
-                ;
+                var data = await documents
+                    .Find(x => x.Id == request.Id)
+                    .FirstOrDefaultAsync(cancellationToken);
 
                 var result = _mapper.Map<Result>(data);
                 if (result == null)
                 {
                     throw new DocumentNotFoundException(request.Id);
                 }
-                return Task.FromResult(result);
+                return result;
             }
         }
     }
