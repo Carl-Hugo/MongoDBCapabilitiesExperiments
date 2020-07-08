@@ -11,6 +11,7 @@ env:
     DOTNET_VERSION: '5.0.100-preview.3.20216.6'
     BUILD_CONFIGURATION: Release
     SOLUTION_TO_BUILD: 'MongoDbCapabilities.sln'
+    LANG_VERSION: preview
 jobs:
     build-and-test:
         runs-on: ubuntu-latest
@@ -24,7 +25,7 @@ jobs:
                   dotnet-version: ${{ env.DOTNET_VERSION }}
 
             - name: Build
-              run: dotnet build ${{ env.SOLUTION_TO_BUILD }} --configuration ${{ env.BUILD_CONFIGURATION }}
+              run: dotnet build ${{ env.SOLUTION_TO_BUILD }} --configuration ${{ env.BUILD_CONFIGURATION }} -p:LangVersion=${{ env.LANG_VERSION }}
 
             - name: Test
-              run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }}
+              run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} -p:LangVersion=${{ env.LANG_VERSION }}
