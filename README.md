@@ -1,6 +1,6 @@
 # MongoDB Experiments
 
-Multiple basic operation experiments of a .Net Core API working with MongoDB, including multiple ways of partially updating documents.
+The project follows Vertical Slice Architecture using MediatR, FluentValidation, AutoMapper, Scrutor, and ForEvolve.ExceptionMapper. It implements multiple basic operation experiments of a .Net 5 API working with MongoDB, including various ways of partially updating documents.
 
 Example of supported operations:
 
@@ -13,6 +13,7 @@ Example of supported operations:
 # How to run?
 
 Open the solution in Visual Studio and run the project (F5). **You will need Docker installed.**
+You can also use docker-compose directly.
 
 # How to test?
 
