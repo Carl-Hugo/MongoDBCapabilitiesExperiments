@@ -21,7 +21,7 @@ namespace MongoDbCapabilities.Features.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ReadOneAsync([FromQuery] ReadAllDocuments.Query query)
+        public async Task<IActionResult> ReadAllAsync([FromQuery] ReadAllDocuments.Query query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
@@ -33,6 +33,14 @@ namespace MongoDbCapabilities.Features.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpGet("{id}/raw")]
+        public async Task<IActionResult> ReadOneRawAsync([FromRoute] ReadOneRawDocument.Query query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] CreateDocument.Command command)
