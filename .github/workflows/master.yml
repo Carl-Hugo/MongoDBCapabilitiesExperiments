@@ -8,7 +8,7 @@ on:
         branches:
             - master
 env:
-    DOTNET_VERSION: '5.0.100-preview.3.20216.6'
+    DOTNET_VERSION: '5.0.100-preview.6.20318.15'
     BUILD_CONFIGURATION: Release
     SOLUTION_TO_BUILD: 'MongoDbCapabilities.sln'
     LANG_VERSION: preview
