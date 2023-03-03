@@ -17,7 +17,7 @@
     <PackageReference Include="ForEvolve.ExceptionMapper.HttpMiddleware" Version="1.0.24-gff560b4837" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-    <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.6.2" />
     <PackageReference Include="Scrutor" Version="3.2.1" />
   </ItemGroup>
